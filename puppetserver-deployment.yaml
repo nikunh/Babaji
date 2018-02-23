@@ -1,0 +1,46 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose-images.yml
+    kompose.version: 1.9.0 (093c756)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: puppetserver
+  name: puppetserver
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: puppetserver
+    spec:
+      containers:
+      - env:
+        - name: PUPPETDB_SERVER_URL
+          value: puppetdb.local:8081
+        image: vshn/puppet-puppetserver
+        name: puppetserver
+        resources: {}
+        volumeMounts:
+        - mountPath: /etc/puppetlabs/puppet/ssl/
+          name: server-ssl
+        - mountPath: /opt/puppetlabs/server/data/puppetserver/
+          name: server-data
+        - mountPath: /etc/puppetlabs/code/environments/
+          name: r10k-env
+      restartPolicy: Always
+      volumes:
+      - name: server-ssl
+        persistentVolumeClaim:
+          claimName: server-ssl
+      - name: server-data
+        persistentVolumeClaim:
+          claimName: server-data
+      - name: r10k-env
+        persistentVolumeClaim:
+          claimName: r10k-env
+status: {}
