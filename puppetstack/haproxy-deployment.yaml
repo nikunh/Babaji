@@ -1,0 +1,51 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose-images.yml
+    kompose.version: 1.9.0 (093c756)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: haproxy
+  name: haproxy
+  namespace: puppetstack
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: haproxy
+    spec:
+      containers:
+      - env:
+        - name: CA_SERVER
+          value: puppetca.puppetstack
+        - name: PUPPETCA_BACKEND
+          value: puppetca.puppetstack
+        - name: PUPPETDB_BACKEND
+          value: puppetdb.puppetstack
+        - name: PUPPETSERVER_BACKEND
+          value: puppetserver.puppetstack
+        - name: PUPPETEXPLORER_BACKEND
+          value: puppetexplorer.puppetstack
+        image: vshn/puppet-haproxy
+        name: haproxy
+        ports:
+        - containerPort: 8081
+        - containerPort: 8082
+        - containerPort: 8140
+        - containerPort: 9000
+        resources: {}
+        volumeMounts:
+        - mountPath: /usr/local/etc/haproxy/ssl/
+          name: haproxy-ssl
+          subPath: haproxyssl
+      restartPolicy: Always
+      volumes:
+      - name: haproxy-ssl
+        persistentVolumeClaim:
+          claimName: haproxy-ssl
+status: {}

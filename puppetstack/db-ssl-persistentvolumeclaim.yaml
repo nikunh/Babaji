@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: db-ssl
+  namespace: puppetstack
+  annotations:
+    volume.beta.kubernetes.io/storage-class: puppetstack-block
+  labels:
+    app: puppetdb
+spec:
+    #  storageClassName: puppetstack-block
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+status: {}
