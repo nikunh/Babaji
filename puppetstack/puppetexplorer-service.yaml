@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose-images.yml
+    kompose.version: 1.9.0 (093c756)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: puppetexplorer
+  name: puppetexplorer
+  namespace: puppetstack
+spec:
+  type: LoadBalancer
+  ports:
+  - name: puppetexplorer
+    protocol: "TCP"
+    port: 8080
+    targetPort: 8080
+  selector:
+    io.kompose.service: puppetexplorer
+status:
+  loadBalancer: {}

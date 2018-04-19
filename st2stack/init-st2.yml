@@ -1,0 +1,160 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: init-st2-default-files
+  namespace: st2stack
+spec:
+  template:
+    metadata:
+      name: init-st2-default-files
+    spec:
+      containers:
+      - name: init-st2-default-files
+        image: stackstorm/stackstorm:latest
+        imagePullPolicy: IfNotPresent
+        securityContext:
+          capabilities:
+            add:
+            - SYS_ADMIN
+        command:
+        - bash
+        - "-c"
+        - >-
+          mkdir /tmp/st2 &&
+          mount -o bind /opt/stackstorm /tmp/st2 &&
+          rsync -avi /tmp/st2/packs/ /opt/stackstorm/packs/
+        envFrom:
+        - configMapRef: { name: st2 }
+        - configMapRef: { name: rabbitmq }
+        - configMapRef: { name: postgres }
+        volumeMounts:
+        - name: st2-packs-fs-env
+          mountPath: /opt/stackstorm/packs
+        - name: st2-virtual-fs-env
+          mountPath: /opt/stackstorm/virtualenvs 
+        - name: st2-config-fs-env
+          mountPath: /opt/stackstorm/configs 
+        - name: st2-entrypointd-fs-env
+          mountPath: /st2-docker/entrypoint.d  
+        - name: st2-st2d-fs-env
+          mountPath: /st2-docker/st2.d  
+      volumes:
+      - name: st2-virtual-fs-env
+        flexVolume:
+          driver: rook.io/rook
+          fsType: ceph
+          options:
+            fsName: st2stack-shared-fs 
+            clusterName: rook 
+            path: st2-virtual-fs-env
+      - name: st2-packs-fs-env
+        flexVolume:
+          driver: rook.io/rook
+          fsType: ceph
+          options:
+            fsName: st2stack-shared-fs 
+            clusterName: rook 
+            path: st2-packs-fs-env
+      - name: st2-config-fs-env
+        flexVolume:
+          driver: rook.io/rook
+          fsType: ceph
+          options:
+            fsName: st2stack-shared-fs
+            clusterName: rook  
+            path: st2-config-fs-env
+      - name: st2-st2d-fs-env
+        flexVolume:
+          driver: rook.io/rook
+          fsType: ceph
+          options:
+            fsName: st2stack-shared-fs
+            clusterName: rook 
+            path: st2-st2d-fs-env
+      - name: st2-entrypointd-fs-env
+        flexVolume:
+          driver: rook.io/rook
+          fsType: ceph
+          options:
+            fsName: st2stack-shared-fs
+            clusterName: rook 
+            path: st2-entrypointd-fs-env
+      restartPolicy: Never
+
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: init-st2-register-content
+  namespace: st2stack
+spec:
+  template:
+    metadata:
+      name: init-st2-register-content
+    spec:
+      containers:
+      - name: init-st2-register-content
+        image: stackstorm/stackstorm:latest
+        imagePullPolicy: IfNotPresent
+        envFrom:
+        - configMapRef: { name: st2 }
+        - configMapRef: { name: rabbitmq }
+        - configMapRef: { name: postgres }
+        env:
+        - name: ST2_SERVICE
+          value: st2-register-content
+        volumeMounts:
+        - name: st2-packs-fs-env
+          mountPath: /opt/stackstorm/packs
+        - name: st2-virtual-fs-env
+          mountPath: /opt/stackstorm/virtualenvs 
+        - name: st2-config-fs-env
+          mountPath: /opt/stackstorm/configs  
+        - name: st2-entrypointd-fs-env
+          mountPath: /st2-docker/entrypoint.d  
+        - name: st2-st2d-fs-env
+          mountPath: /st2-docker/st2.d  
+      volumes:
+      - name: st2-virtual-fs-env
+        flexVolume:
+          driver: rook.io/rook
+          fsType: ceph
+          options:
+            fsName: st2stack-shared-fs 
+            clusterName: rook 
+            path: st2-virtual-fs-env
+      - name: st2-packs-fs-env
+        flexVolume:
+          driver: rook.io/rook
+          fsType: ceph
+          options:
+            fsName: st2stack-shared-fs 
+            clusterName: rook 
+            path: st2-packs-fs-env
+      - name: st2-config-fs-env
+        flexVolume:
+          driver: rook.io/rook
+          fsType: ceph
+          options:
+            fsName: st2stack-shared-fs
+            clusterName: rook 
+            path: st2-config-fs-env
+      - name: st2-st2d-fs-env
+        flexVolume:
+          driver: rook.io/rook
+          fsType: ceph
+          options:
+            fsName: st2stack-shared-fs
+            clusterName: rook 
+            path: st2-st2d-fs-env
+      - name: st2-entrypointd-fs-env
+        flexVolume:
+          driver: rook.io/rook
+          fsType: ceph
+          options:
+            fsName: st2stack-shared-fs
+            clusterName: rook 
+            path: st2-entrypointd-fs-env
+      restartPolicy: Never
+
