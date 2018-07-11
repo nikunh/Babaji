@@ -3,7 +3,7 @@ kind: Namespace
 metadata:
   name: rook
 ---
-apiVersion: rook.io/v1alpha1
+apiVersion: rook.io/v1beta1
 kind: Cluster
 metadata:
   name: rook
