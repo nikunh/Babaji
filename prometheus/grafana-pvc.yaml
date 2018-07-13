@@ -1,0 +1,22 @@
+---
+# Source: grafana/templates/pvc.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  annotations:
+  labels:
+    app: prometheus-grafana-grafana
+    chart: "grafana-0.8.5"
+    component: "grafana"
+    heritage: "Tiller"
+    release: "prometheus-grafana"
+  name: prometheus-grafana
+  namespace: prometheus
+spec:
+  storageClassName: prometheus-block
+  accessModes:
+    - "ReadWriteOnce"
+  resources:
+    requests:
+      storage: "1Gi"
+

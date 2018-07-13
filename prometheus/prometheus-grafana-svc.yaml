@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: prometheus-grafana-grafana
+  name: prometheus-grafana-svc
+  namespace: prometheus
+  selfLink: /api/v1/namespaces/prometheus/services/prometheus-grafana
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    app: prometheus-grafana-grafana
+    component: grafana
+  sessionAffinity: None
+  type: LoadBalancer
