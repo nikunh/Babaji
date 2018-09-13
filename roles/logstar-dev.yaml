@@ -1,0 +1,14 @@
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: edit-dev
+  namespace: logstar-dev
+subjects:
+  - kind: User
+    name: umesh
+  - kind: User
+    name: nikun_test
+roleRef:
+  kind: ClusterRole
+  name: admin # Specify which type of role you want the users to have
+  apiGroup: rbac.authorization.k8s.io

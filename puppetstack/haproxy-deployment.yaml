@@ -31,7 +31,7 @@ spec:
           value: puppetserver.puppetstack
         - name: PUPPETEXPLORER_BACKEND
           value: puppetexplorer.puppetstack
-        image: vshn/puppet-haproxy
+        image: nikun/puppetstack-haproxy
         name: haproxy
         ports:
         - containerPort: 8081
@@ -41,11 +41,21 @@ spec:
         resources: {}
         volumeMounts:
         - mountPath: /usr/local/etc/haproxy/ssl/
-          name: haproxy-ssl
+          name: haproxy-ssl-fs
+          #name: haproxy-ssl
           subPath: haproxyssl
       restartPolicy: Always
+      nodeSelector:
+        dc: sgdc
       volumes:
-      - name: haproxy-ssl
-        persistentVolumeClaim:
-          claimName: haproxy-ssl
+      #- name: haproxy-ssl
+        #persistentVolumeClaim:
+          #claimName: haproxy-ssl
+      - name: haproxy-ssl-fs
+        flexVolume:
+          driver: rook.io/rook
+          fsType: ceph
+          options:
+            fsName: puppetstack-shared-fs
+            clusterName: rook
 status: {}

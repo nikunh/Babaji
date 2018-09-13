@@ -118,6 +118,62 @@ subjects:
   name: rook-operator
   namespace: rook-system
 ---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  name: filesystems.rook.io
+spec:
+  group: rook.io
+  names:
+    kind: Filesystem
+    listKind: FilesystemList
+    plural: filesystems
+    singular: filesystem
+  scope: Namespaced
+  version: v1alpha1
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  name: objectstores.rook.io
+spec:
+  group: rook.io
+  names:
+    kind: ObjectStore
+    listKind: ObjectStoreList
+    plural: objectstores
+    singular: objectstore
+  scope: Namespaced
+  version: v1alpha1
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  name: pools.rook.io
+spec:
+  group: rook.io
+  names:
+    kind: Pool
+    listKind: PoolList
+    plural: pools
+    singular: pool
+  scope: Namespaced
+  version: v1alpha1
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  name: volumeattachments.rook.io
+spec:
+  group: rook.io
+  names:
+    kind: VolumeAttachment
+    listKind: VolumeAttachmentList
+    plural: volumeattachments
+    singular: volumeattachment
+  scope: Namespaced
+  version: v1alpha1
+---
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:

@@ -11,7 +11,7 @@ metadata:
 spec:
   storageClassName: puppetstack-block
   accessModes:
-  - ReadWriteMany
+  - ReadWriteOnce
   resources:
     requests:
       storage: 100Mi

@@ -1,0 +1,12 @@
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: edit-dev
+  namespace: brahma-shell
+subjects:
+  - kind: User
+    name: nikun_test
+roleRef:
+  kind: ClusterRole
+  name: admin # Specify which type of role you want the users to have
+  apiGroup: rbac.authorization.k8s.io

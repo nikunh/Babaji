@@ -1,0 +1,21 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: puppet-test-client
+  namespace: puppetstack
+spec:
+ replicas: 1
+ template:
+  metadata:
+   labels:
+    app: puppet-test-client
+  spec:
+   containers:
+   - name: puppet-test-client
+     image: puppet/puppet-agent-ubuntu
+   hostAliases:
+       - ip: 10.0.194.224
+         hostnames:
+         - puppet
+status: {}

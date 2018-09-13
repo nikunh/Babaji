@@ -41,10 +41,13 @@ spec:
         volumeMounts:
         - mountPath: /etc/puppetlabs/code/environments
           name: r10k-fs-env
+          subPath: r10k-fs-env
         - mountPath: /opt/puppetlabs/r10k/cache
           name: r10k-cache
+          subPath: r10k-cache
         - mountPath: /etc/puppetlabs/puppet/ssl
           name: r10k-ssl
+          subPath: r10k-cache
       restartPolicy: Always
       volumes:
           # - name: r10k-env

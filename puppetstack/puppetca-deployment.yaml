@@ -27,7 +27,7 @@ spec:
           value: puppetca.puppetstack
         - name: PUPPETCONF_MASTER_DNS_ALT_NAMES
           value: puppetca.puppetstack
-        image: vshn/puppet-puppetserver
+        image: nikun/puppetstack-puppetserver
         name: puppetca
         resources: {}
         lifecycle:

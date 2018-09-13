@@ -4,16 +4,16 @@ metadata:
   name: rook-tools
   namespace: rook
 spec:
-  dnsPolicy: ClusterFirstWithHostNet
   containers:
   - name: rook-tools
-    image: rook/ceph-toolbox:master
+    image: quay.io/rook/toolbox:latest
     imagePullPolicy: IfNotPresent
+    args: ["sleep", "36500d"]
     env:
-      - name: ROOK_ADMIN_SECRET
+      - name: ROOKD_ADMIN_SECRET
         valueFrom:
           secretKeyRef:
-            name: rook-ceph-mon
+            name: mon
             key: admin-secret
     securityContext:
       privileged: true
@@ -24,9 +24,6 @@ spec:
         name: sysbus
       - mountPath: /lib/modules
         name: libmodules
-      - name: mon-endpoint-volume
-        mountPath: /etc/rook
-  hostNetwork: false
   volumes:
     - name: dev
       hostPath:
@@ -37,9 +34,3 @@ spec:
     - name: libmodules
       hostPath:
         path: /lib/modules
-    - name: mon-endpoint-volume
-      configMap:
-        name: rook-ceph-mon-endpoints
-        items:
-        - key: data
-          path: mon-endpoints
